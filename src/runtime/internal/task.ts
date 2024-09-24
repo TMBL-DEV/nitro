@@ -20,6 +20,12 @@ export function defineTask<RT = unknown>(def: Task<RT>): Task<RT> {
   return def;
 }
 
+/** @experimental */
+export function listTasks(): string[] {
+  return Object.keys(tasks);
+};
+
+
 const __runningTasks__: { [name: string]: ReturnType<Task<any>["run"]> } = {};
 
 /** @experimental */

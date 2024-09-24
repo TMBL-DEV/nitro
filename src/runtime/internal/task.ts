@@ -21,8 +21,17 @@ export function defineTask<RT = unknown>(def: Task<RT>): Task<RT> {
 }
 
 /** @experimental */
-export function listTasks(): string[] {
-  return Object.keys(tasks);
+export async function listTasks() {
+  const _tasks = await Promise.all(
+    Object.entries(tasks).map(async ([name, task]) => {
+      const _task = await task.resolve?.();
+      return [name, { description: _task?.meta?.description }];
+    })
+  );
+  return {
+    tasks: Object.fromEntries(_tasks),
+    scheduledTasks,
+  };
 };
 
 
